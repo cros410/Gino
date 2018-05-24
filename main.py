@@ -34,29 +34,25 @@ class Game():
     def draw(self):
         bg = pg.image.load("./assets/bg.jpg")
         self.win.blit(bg, (0, 0))
-        sol = pg.image.load("./assets/key.png")
-        self.win.blit(sol, (50, 249))
-        la = pg.image.load("./assets/key.png")
-        self.win.blit(la, (140, 249))
-        sib = pg.image.load("./assets/key.png")
-        self.win.blit(sib, (230, 249))
-        si = pg.image.load("./assets/key.png")
-        self.win.blit(si, (320, 249))
-        do = pg.image.load("./assets/key_p.png")
-        self.win.blit(do, (410, 249))
-        re = pg.image.load("./assets/key.png")
-        self.win.blit(re, (500, 249))
-        mib = pg.image.load("./assets/key.png")
-        self.win.blit(mib, (590, 249))
-        fa = pg.image.load("./assets/key.png")
-        self.win.blit(fa, (680, 249))
+
+        key = pg.image.load("./assets/key.png")
+        key_press = pg.image.load("./assets/key_p.png")
+
+        
+        self.win.blit(key, (50, 249)) #sol 
+        self.win.blit(key, (140, 249)) #la
+        self.win.blit(key, (230, 249)) #sib
+        self.win.blit(key, (320, 249)) #si
+        self.win.blit(key, (410, 249)) #do
+        self.win.blit(key, (500, 249)) #re
+        self.win.blit(key, (590, 249)) #mib
+        self.win.blit(key_press, (680, 249)) #fa
 
 
         s = pg.image.load("./assets/s.png")
-        self.win.blit(s, (115, 249))
+        
         self.win.blit(s, (210, 249))
         self.win.blit(s, (300, 249))
-        self.win.blit(s, (390, 249))
         self.win.blit(s, (480, 249))
         self.win.blit(s, (570, 249))
         self.win.blit(s, (660, 249))
