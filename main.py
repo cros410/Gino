@@ -28,7 +28,6 @@ class Game():
         self.panel_2 = pg.image.load("./assets/notes_2.png")
         self.panel_3 = pg.image.load("./assets/notes_3.png")
         self.panel_4 = pg.image.load("./assets/notes_4.png")
-        
 
         self.SOL = pg.mixer.Sound("./sounds/SOL.wav")
         self.LA = pg.mixer.Sound("./sounds/LA.wav")
@@ -38,26 +37,28 @@ class Game():
         self.RE = pg.mixer.Sound("./sounds/RE.wav")
         self.MIB = pg.mixer.Sound("./sounds/MIB.wav")
         self.FA = pg.mixer.Sound("./sounds/FA.wav")
-        
+
+        self.LOSE = pg.mixer.Sound("./sounds/LOSE.wav")
+        self.GANAR = pg.mixer.Sound("./sounds/WIN.wav")
+
         self.SONG_1 = pg.mixer.Sound("./sounds/SONGP1.wav")
         self.notes_1 = ["SOL", "SOL", "SOL",
                         "SOL", "LA", "SI", "DO", "DO", "DO"]
         self.SONG_2 = pg.mixer.Sound("./sounds/SONGP2.wav")
         self.notes_2 = ["RE", "MIB", "DO", "DO", "DO", "RE", "MIB", "DO"]
-        
+
         self.SONG_3 = pg.mixer.Sound("./sounds/SONGP3.wav")
         self.notes_3 = ["SOL", "SOL", "SOL", "SOL", "LA", "SI",
                         "DO", "DO", "DO", "DO", "DO", "SIB", "SOL", "SIB", "SOL"]
-        
+
         self.SONG_4 = pg.mixer.Sound("./sounds/SONGP4.wav")
         self.notes_4 = ["DO", "DO", "SIB", "DO", "SOL", "DO",
                         "SIB", "DO", "SIB", "SOL", "FA", "MI", "RE"]
-        
+
         self.actual = 1
-        self.in_song = False
-        self.in_playing = False
-        self.key_now = "DO"
         self.time_key = 0
+        self.in_song = False
+        self.in_play = False
 
     def new(self):
         self.run()
@@ -83,33 +84,34 @@ class Game():
                 b, note = self.get_note(mouse[0], mouse[1])
                 if b:
                     if (note == "SOL"):
-                        pg.mixer.Sound.play(self.SOL)
+                        self.evaluar("SOL", self.SOL)
                     if (note == "LA"):
-                        pg.mixer.Sound.play(self.LA)
+                        self.evaluar("LA", self.LA)
                     if (note == "SIB"):
-                        pg.mixer.Sound.play(self.SIB)
+                        self.evaluar("SIB", self.SIB)
                     if (note == "SI"):
-                        pg.mixer.Sound.play(self.SI)
+                        self.evaluar("SI", self.SI)
                     if (note == "DO"):
-                        pg.mixer.Sound.play(self.DO)
+                        self.evaluar("DO", self.DO)
                     if (note == "RE"):
-                        pg.mixer.Sound.play(self.RE)
+                        self.evaluar("RE", self.RE)
                     if (note == "MIB"):
-                        pg.mixer.Sound.play(self.MIB)
+                        self.evaluar("MIB", self.MIB)
                     if (note == "FA"):
-                        pg.mixer.Sound.play(self.FA)
+                        self.evaluar("FA", self.FA)
 
                     if (note == "PLAY"):
                         self.in_song = True
+                        self.in_play = True
                         pg.mixer.Sound.play(self.get_song())
             if event.type == pg.QUIT:
                 self.running = False
 
     def draw(self):
-        
+
         self.win.blit(self.bg, (0, 0))
         self.draw_panel()
-        self.draw_keys(self.in_song, self.key_now)
+        self.draw_keys()
         self.draw_s()
         pg.display.flip()
 
@@ -140,12 +142,16 @@ class Game():
 
     def get_song(self):
         if(self.actual == 1):
+            print("SONG 1")
             return self.SONG_1
         if(self.actual == 2):
+            print("SONG 2")
             return self.SONG_2
         if(self.actual == 3):
+            print("SONG 3")
             return self.SONG_3
         if(self.actual == 4):
+            print("SONG 4")
             return self.SONG_4
 
     def draw_s(self):
@@ -158,7 +164,7 @@ class Game():
         play = pg.image.load("./assets/play.png")
         self.win.blit(play, (365, 50))
 
-    def draw_keys(self, b, press):
+    def draw_keys(self):
 
         self.win.blit(self.sol, (50, 249))  # sol
         self.win.blit(self.la, (140, 249))  # la
@@ -168,11 +174,6 @@ class Game():
         self.win.blit(self.re, (500, 249))  # re
         self.win.blit(self.mib, (590, 249))  # mib
         self.win.blit(self.fa, (680, 249))  # fa
-        
-    def next(self):
-        self.actual = self.actual + 1
-        if self.actual > 4:
-            self.actual = 1
 
     def draw_panel(self):
         if self.in_song:
@@ -186,6 +187,56 @@ class Game():
                 self.win.blit(self.panel_4, (50, 50))
         else:
             self.win.blit(self.panel, (50, 50))
+
+    def evaluar(self, key, sound):
+        if self.in_play:
+            if(self.actual == 1):
+                if(self.notes_1[self.time_key] == key):
+                    self.time_key = self.time_key + 1
+                    pg.mixer.Sound.play(sound)
+                    if(self.time_key == len(self.notes_1)):
+                        self.win_song()
+                else:
+                    self.lose_song()
+            elif(self.actual == 2):
+                if(self.notes_2[self.time_key] == key):
+                    self.time_key = self.time_key + 1
+                    pg.mixer.Sound.play(sound)
+                    if(self.time_key == len(self.notes_2)):
+                        self.win_song()
+                else:
+                    self.lose_song()
+            elif(self.actual == 3):
+                if(self.notes_3[self.time_key] == key):
+                    self.time_key = self.time_key + 1
+                    pg.mixer.Sound.play(sound)
+                    if(self.time_key == len(self.notes_3)):
+                        self.win_song()
+                else:
+                    self.lose_song()
+            elif(self.actual == 4):
+                if(self.notes_4[self.time_key] == key):
+                    self.time_key = self.time_key + 1
+                    pg.mixer.Sound.play(sound)
+                    if(self.time_key == len(self.notes_4)):
+                        self.win_song()
+                else:
+                    self.lose_song()
+            
+    def lose_song(self):
+        self.time_key = 0
+        self.actual = 1
+        self.in_play = False
+        pg.mixer.Sound.play(self.LOSE)
+    
+    def win_song(self):
+        pg.mixer.Sound.play(self.GANAR)
+        self.time_key = 0
+        self.actual = self.actual + 1
+        print("ACTUAL : {}".format(self.actual))
+        if self.actual > 4:
+            print("RECETEAR")
+            self.actual = 1
 
 g = Game()
 while g.running:
